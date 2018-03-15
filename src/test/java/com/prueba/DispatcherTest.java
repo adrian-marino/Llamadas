@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class DispatcherTest {
 	
-	private Dispatcher dis = new Dispatcher();
+	private Dispatcher dispatcher = new Dispatcher();
 
 	/***
 	 * Prueba Unitaria para cumplir con el requerimiento
@@ -35,7 +35,7 @@ public class DispatcherTest {
 		return new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
-				dis.dispatchCall();
+				dispatcher.dispatchCall();
 				return true;
 			}
 		};
