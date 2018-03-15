@@ -1,8 +1,9 @@
 package com.prueba;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -16,7 +17,7 @@ public class Llamada implements Runnable{
 	private Empleado empleado;
 	private Long duracion;
 	
-	private static Queue<Empleado> empleados = getEmpleados();
+	private static List<Empleado> empleados = getEmpleados();
 	
 	ReentrantLock lock = new ReentrantLock();
 	
@@ -76,8 +77,8 @@ public class Llamada implements Runnable{
 		return empl;
 	}
 	
-	public static synchronized Queue<Empleado> getEmpleados(){
-		Queue<Empleado> lista = new LinkedBlockingQueue<>();
+	public static synchronized List<Empleado> getEmpleados(){
+		List<Empleado> lista = new ArrayList<>();
 		
 		lista.add(new Operador("OPERADOR 1", 1L, true));
 		lista.add(new Operador("OPERADOR 2", 2L, true));
@@ -94,7 +95,7 @@ public class Llamada implements Runnable{
 		
 		Comparator<Empleado> c =
 				(Empleado o1, Empleado o2)->o1.getPrioridad().compareTo(o2.getPrioridad());
-//		Collections.sort(lista, c);
+		Collections.sort(lista, c);
 		return lista;
 	}
 
