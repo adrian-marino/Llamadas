@@ -6,6 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.prueba.dto.Director;
 import com.prueba.dto.Empleado;
 import com.prueba.dto.Operador;
@@ -17,18 +20,19 @@ public class Llamada implements Runnable{
 	private Long duracion;
 	
 	private static List<Empleado> empleados = getEmpleados();
+	Logger log = LoggerFactory.getLogger(Llamada.class);
 	
 	@Override
 	public void run() {
-		Empleado empleadoAsignado = asignarEmpleado();
-		setEmpleado(empleadoAsignado);
-		System.out.println("INICIA LLAMADA ATENDIDA POR -> " + getEmpleado().getNombre());
 		try {
+			setEmpleado(asignarEmpleado());
+			System.out.println("INICIA LLAMADA ATENDIDA POR -> " + getEmpleado().getNombre());
 			Long duracionLlamada = asignarDuracion();
 			TimeUnit.SECONDS.sleep(duracionLlamada);
 			finalizarLlamada(getEmpleado(), duracionLlamada);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			log.error("ERROR", e);
+			Thread.currentThread().interrupt();
 		}
 	}
 	
@@ -53,20 +57,21 @@ public class Llamada implements Runnable{
 		this.duracion = duracion;
 	}
 	
-	public synchronized void finalizarLlamada(Empleado empl, Long duracionLlamada) throws InterruptedException {
-		Empleado empleado = empleados.stream()
-				.filter(a->a.getId().equals(empl.getId())).findFirst().orElseGet(null);
-		empleado.setDisponible(true);
+	public synchronized void finalizarLlamada(Empleado empl, Long duracionLlamada) {
+		Empleado empleadoHabilitar = empleados.stream()
+				.filter(a->a.getId().equals(empl.getId())).findFirst().orElse(null);
+		if(null != empleadoHabilitar) {
+			empleadoHabilitar.setDisponible(true);
+		}
 		System.out.println("FINALIZA LLAMADA ATENDIDA POR -> " + getEmpleado().getNombre() + " DURACION LLAMADA -> " + duracionLlamada);
 	}
 
-	public synchronized Empleado asignarEmpleado() {
+	public synchronized Empleado asignarEmpleado() throws InterruptedException {
 		Empleado empl = empleados.stream()
-				.filter(Empleado::isDisponible).findFirst().orElseGet(null);
+				.filter(Empleado::isDisponible).findFirst().orElse(null);
 		if(null != empl) {
 			empl.setDisponible(false);
 		}  else {
-			System.out.println("SIM EMPLEADOS");
 			asignarEmpleado();
 		}
 		return empl;

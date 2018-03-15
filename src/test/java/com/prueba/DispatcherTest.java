@@ -24,24 +24,21 @@ public class DispatcherTest {
 	 */
 	@Test
 	public void dispatchCallDiezLlamadas() throws InterruptedException, ExecutionException {
-		Callable<Long> task = new Callable<Long>() {
-            @Override
-            public Long call() {
-            	try {
-					dis.dispatchCall();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
-				}
-                return 1L;
-            }
-        };
-		List<Callable<Long>> tasks = Collections.nCopies(10, task);
+		List<Callable<Boolean>> tasks = Collections.nCopies(10, calleable());
 		ExecutorService executorService = Executors.newFixedThreadPool(10);
-		List<Future<Long>> llamadaEjecutas = executorService.invokeAll(tasks);
+		List<Future<Boolean>> llamadaEjecutas = executorService.invokeAll(tasks);
 		Thread.sleep(15000);
-		Assert.assertEquals(llamadaEjecutas.size(), 10);
+		Assert.assertEquals(10, llamadaEjecutas.size());
+	}
+	
+	private Callable<Boolean> calleable(){
+		return new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				dis.dispatchCall();
+				return true;
+			}
+		};
 	}
 	
 	/***
@@ -53,48 +50,22 @@ public class DispatcherTest {
 	 */
 	@Test
 	public void dispatchCallMasDiezLlamadas() throws InterruptedException, ExecutionException {
-		Callable<Long> task = new Callable<Long>() {
-            @Override
-            public Long call() {
-            	try {
-					dis.dispatchCall();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
-				}
-                return 1L;
-            }
-        };
-		List<Callable<Long>> tasks = Collections.nCopies(11, task);
+		List<Callable<Boolean>> tasks = Collections.nCopies(11, calleable());
 		ExecutorService executorService = Executors.newFixedThreadPool(11);
-		List<Future<Long>> invokeAll = executorService.invokeAll(tasks);
+		List<Future<Boolean>> invokeAll = executorService.invokeAll(tasks);
 		Thread.sleep(15000);
 		
-		Assert.assertEquals(invokeAll.size(), 11);
+		Assert.assertEquals(11, invokeAll.size());
 	}
 	
 	@Test
 	public void dispatchCallMenosDiezLlamadas() throws InterruptedException, ExecutionException {
-		Callable<Long> task = new Callable<Long>() {
-            @Override
-            public Long call() {
-            	try {
-					dis.dispatchCall();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
-				}
-                return 1L;
-            }
-        };
-		List<Callable<Long>> tasks = Collections.nCopies(5, task);
+		List<Callable<Boolean>> tasks = Collections.nCopies(5, calleable());
 		ExecutorService executorService = Executors.newFixedThreadPool(10);
-		List<Future<Long>> invokeAll = executorService.invokeAll(tasks);
+		List<Future<Boolean>> invokeAll = executorService.invokeAll(tasks);
 		Thread.sleep(15000);
 		
-		Assert.assertEquals(invokeAll.size(), 5);
+		Assert.assertEquals(5, invokeAll.size());
 	}
 	
 }
