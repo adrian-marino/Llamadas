@@ -66,7 +66,7 @@ public class Llamada implements Runnable{
 		System.out.println("FINALIZA LLAMADA ATENDIDA POR -> " + getEmpleado().getNombre() + " DURACION LLAMADA -> " + duracionLlamada);
 	}
 
-	public synchronized Empleado asignarEmpleado() throws InterruptedException {
+	public synchronized Empleado asignarEmpleado() {
 		Empleado empl = empleados.stream()
 				.filter(Empleado::isDisponible).findFirst().orElse(null);
 		if(null != empl) {
