@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.prueba.dto.Director;
 import com.prueba.dto.Empleado;
@@ -18,8 +17,6 @@ public class Llamada implements Runnable{
 	private Long duracion;
 	
 	private static List<Empleado> empleados = getEmpleados();
-	
-	ReentrantLock lock = new ReentrantLock();
 	
 	@Override
 	public void run() {
@@ -64,12 +61,10 @@ public class Llamada implements Runnable{
 	}
 
 	public synchronized Empleado asignarEmpleado() {
-		lock.lock();
 		Empleado empl = empleados.stream()
 				.filter(Empleado::isDisponible).findFirst().orElseGet(null);
 		if(null != empl) {
 			empl.setDisponible(false);
-			lock.unlock();
 		}  else {
 			System.out.println("SIM EMPLEADOS");
 			asignarEmpleado();
