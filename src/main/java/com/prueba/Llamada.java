@@ -25,8 +25,9 @@ public class Llamada implements Runnable{
 	@Override
 	public void run() {
 		try {
-			setEmpleado(asignarEmpleado());
-			System.out.println("INICIA LLAMADA ATENDIDA POR -> " + getEmpleado().getNombre());
+			Empleado empleadoAsignado = asignarEmpleado();
+			setEmpleado(empleadoAsignado);
+			System.out.println("INICIA LLAMADA ATENDIDA POR -> " + empleadoAsignado.getNombre());
 			Long duracionLlamada = asignarDuracion();
 			TimeUnit.SECONDS.sleep(duracionLlamada);
 			finalizarLlamada(getEmpleado(), duracionLlamada);
@@ -77,7 +78,7 @@ public class Llamada implements Runnable{
 		return empl;
 	}
 	
-	public static synchronized List<Empleado> getEmpleados(){
+	public static List<Empleado> getEmpleados(){
 		List<Empleado> lista = new ArrayList<>();
 		
 		lista.add(new Operador("OPERADOR 1", 1L, true));
