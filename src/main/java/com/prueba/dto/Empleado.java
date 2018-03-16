@@ -1,5 +1,10 @@
 package com.prueba.dto;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class Empleado {
 	
 	private String nombre;
@@ -50,5 +55,27 @@ public class Empleado {
 
 	public void setPrioridad(Long prioridad) {
 		this.prioridad = prioridad;
+	}
+	
+	public static List<Empleado> getEmpleados(){
+		List<Empleado> lista = new ArrayList<>();
+		
+		lista.add(new Operador("OPERADOR 1", 1L, true));
+		lista.add(new Operador("OPERADOR 2", 2L, true));
+		lista.add(new Operador("OPERADOR 3", 3L, true));
+		lista.add(new Operador("OPERADOR 4", 4L, true));
+		lista.add(new Operador("OPERADOR 5", 5L, true));
+		lista.add(new Operador("OPERADOR 6", 6L, true));
+		lista.add(new Operador("OPERADOR 7", 7L, true));
+		
+		lista.add(new Supervisor("SUPERVISOR 1", 8L, true));
+		lista.add(new Supervisor("SUPERVISOR 2", 9L, true));
+		
+		lista.add(new Director("DIRECTOR", 10L, true));
+		
+		Comparator<Empleado> c =
+				(Empleado o1, Empleado o2)->o1.getPrioridad().compareTo(o2.getPrioridad());
+		Collections.sort(lista, c);
+		return lista;
 	}
 }
