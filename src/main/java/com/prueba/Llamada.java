@@ -19,7 +19,11 @@ public class Llamada implements Runnable{
 	@Override
 	public void run() {
 		try {
-			Empleado empleadoAsignado = asignarEmpleado();
+			Empleado empleadoAsignado = null;
+			do {
+				empleadoAsignado = asignarEmpleado();
+			} while (empleadoAsignado == null);
+			
 			setEmpleado(empleadoAsignado);
 			System.out.println("INICIA LLAMADA ATENDIDA POR -> " + empleadoAsignado.getNombre());
 			Long duracionLlamada = asignarDuracion();
@@ -37,7 +41,6 @@ public class Llamada implements Runnable{
 
 	public Empleado getEmpleado() {
 		return empleado;
-		
 	}
 
 	public void setEmpleado(Empleado empleado) {
@@ -66,9 +69,7 @@ public class Llamada implements Runnable{
 				.filter(Empleado::isDisponible).findFirst().orElse(null);
 		if(null != empl) {
 			empl.setDisponible(false);
-		}  else {
-			asignarEmpleado();
-		}
+		}  
 		return empl;
 	}
 	
